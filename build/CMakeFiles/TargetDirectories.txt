@@ -1,3 +1,0 @@
-/home/drvkize/codex/compile_time_utility/build/CMakeFiles/rebuild_cache.dir
-/home/drvkize/codex/compile_time_utility/build/CMakeFiles/test.dir
-/home/drvkize/codex/compile_time_utility/build/CMakeFiles/edit_cache.dir

@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/drvkize/codex/compile_time_utility/build",
-  "command": "/usr/bin/g++-8   -I/home/drvkize/codex/compile_time_utility/include  -g   -std=c++17 -o CMakeFiles/test.dir/source/main.o -c /home/drvkize/codex/compile_time_utility/source/main.cpp",
-  "file": "/home/drvkize/codex/compile_time_utility/source/main.cpp"
-}
-]

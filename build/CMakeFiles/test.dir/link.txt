@@ -1,1 +1,0 @@
-/usr/bin/g++-8  -g  -rdynamic CMakeFiles/test.dir/source/main.o  -o ../test 
