@@ -22,6 +22,12 @@ struct test_struct
     constexpr T value() const { return _value; }
 };
 
+// template<typename Dict, typename Key, typename... Ts>
+// constexpr auto get_member( const const_dict<Key, Ts...>& obj, const Key& mem )
+// {
+//     return get_element<obj.find( Key { mem } )>( obj ).value();
+// }
+
 int main( int argc, char** argv )
 {
     constexpr auto x0 = const_array{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -143,23 +149,24 @@ int main( int argc, char** argv )
         }
     };
 
-    #define get_member( obj, mem ) get_element<obj.find( mem )>( obj ).value()
+    constexpr std::size_t I = find( root, "glossary" );
+    printf( "find return: %lu\n", I );
 
-    constexpr auto glossary = get_member( root, "glossary" );
-        constexpr auto glossary_title = get_member( glossary, "title" );
-        constexpr auto glossary_GlossDiv = get_member( glossary, "GlossDiv" );
-            constexpr auto GlossDiv_title = get_member( glossary_GlossDiv, "title" );
-            constexpr auto GlossDiv_GlossList = get_member( glossary_GlossDiv, "GlossList" );
-                constexpr auto GlossList_GlossEntry = get_member( GlossDiv_GlossList, "GlossEntry" );
-                    constexpr auto GlossEntry_ID = get_member( GlossList_GlossEntry, "ID" );
-                    constexpr auto GlossEntry_SortAs = get_member( GlossList_GlossEntry, "SortAs" );
-                    constexpr auto GlossEntry_GlossTerm = get_member( GlossList_GlossEntry, "GlossTerm" );
-                    constexpr auto GlossEntry_Acronym = get_member( GlossList_GlossEntry, "Acronym" );
-                    constexpr auto GlossEntry_Abbrev = get_member( GlossList_GlossEntry, "Abbrev" );
-                    constexpr auto GlossEntry_GlossDef = get_member( GlossList_GlossEntry, "GlossDef" );
-                        constexpr auto GlossDef_para = get_member( GlossEntry_GlossDef, "para" );
-                        constexpr auto GlossDef_GlossSeeAlso = get_member( GlossEntry_GlossDef, "GlossSeeAlso" );
-                    constexpr auto GlossEntry_GlossSee = get_member( GlossList_GlossEntry, "GlossSee" );
+    constexpr auto glossary = get_value( root, "glossary" );
+        constexpr auto glossary_title = get_value( glossary, "title" );
+        constexpr auto glossary_GlossDiv = get_value( glossary, "GlossDiv" );
+            constexpr auto GlossDiv_title = get_value( glossary_GlossDiv, "title" );
+            constexpr auto GlossDiv_GlossList = get_value( glossary_GlossDiv, "GlossList" );
+                constexpr auto GlossList_GlossEntry = get_value( GlossDiv_GlossList, "GlossEntry" );
+                    constexpr auto GlossEntry_ID = get_value( GlossList_GlossEntry, "ID" );
+                    constexpr auto GlossEntry_SortAs = get_value( GlossList_GlossEntry, "SortAs" );
+                    constexpr auto GlossEntry_GlossTerm = get_value( GlossList_GlossEntry, "GlossTerm" );
+                    constexpr auto GlossEntry_Acronym = get_value( GlossList_GlossEntry, "Acronym" );
+                    constexpr auto GlossEntry_Abbrev = get_value( GlossList_GlossEntry, "Abbrev" );
+                    constexpr auto GlossEntry_GlossDef = get_value( GlossList_GlossEntry, "GlossDef" );
+                        constexpr auto GlossDef_para = get_value( GlossEntry_GlossDef, "para" );
+                        constexpr auto GlossDef_GlossSeeAlso = get_value( GlossEntry_GlossDef, "GlossSeeAlso" );
+                    constexpr auto GlossEntry_GlossSee = get_value( GlossList_GlossEntry, "GlossSee" );
 
     printf( "glossary[%lu]:\n", glossary.size() );
         printf( "\tglossary_title = %s\n", glossary_title.data() );
