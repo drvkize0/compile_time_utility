@@ -1,0 +1,39 @@
+# name
+set( TARGET_NAME "test" )
+
+# directories
+set( TARGET_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include )
+set( TARGET_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source )
+
+# files
+list( APPEND TARGET_HEADER
+    ${TARGET_INCLUDE_DIR}/const_array.h
+    ${TARGET_INCLUDE_DIR}/const_dict.h
+    ${TARGET_INCLUDE_DIR}/const_pair.h
+    ${TARGET_INCLUDE_DIR}/const_tuple.h
+    ${TARGET_INCLUDE_DIR}/hash.h
+    ${TARGET_INCLUDE_DIR}/string_enum.h
+    )
+list( APPEND TARGET_SOURCE
+    ${TARGET_SOURCE_DIR}/main.cpp
+    )
+
+# target
+add_executable( ${TARGET_NAME}
+    ${TARGET_HEADER}
+    ${TARGET_SOURCE}
+    )
+
+target_include_directories( ${TARGET_NAME} PRIVATE
+    ${TARGET_INCLUDE_DIR}
+    )
+
+set_target_properties( ${TARGET_NAME} PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
