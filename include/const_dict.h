@@ -85,5 +85,5 @@ namespace compile_time_utility
         };
     }
 
-    #define get_value( dict, key ) detail::get_value_impl<find( dict, key )>::get( dict )
+    #define get_value( dict, key ) ::compile_time_utility::detail::get_value_impl<find( dict, key )>::get( dict )
 }
