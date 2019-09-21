@@ -31,51 +31,59 @@ namespace compile_time_utility
     template<typename... Ks, typename... Vs>
     const_dict( const const_pair<Ks, Vs>&... ) -> const_dict<typename std::common_type<typename const_pair<Ks, Vs>::Key...>::type, Vs...>;
 
-    template<std::size_t I, std::size_t N>
-    struct find_impl
+    // find
+    namespace detail
     {
-        template<typename Key, typename... Ts>
-        static constexpr std::size_t find( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
+        template<std::size_t I, std::size_t N>
+        struct find_impl
         {
-            return get_element<I>( dict ).key() == key ? I : find_impl<I + 1, N>::find( dict, key );
-        }
-    };
+            template<typename Key, typename... Ts>
+            static constexpr std::size_t find( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
+            {
+                return get_element<I>( dict ).key() == key ? I : find_impl<I + 1, N>::find( dict, key );
+            }
+        };
 
-    template<std::size_t N>
-    struct find_impl<N, N>
-    {
-        template<typename Key, typename... Ts>
-        static constexpr std::size_t find( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
+        template<std::size_t N>
+        struct find_impl<N, N>
         {
-            return std::size_t( -1 );
-        }
-    };
+            template<typename Key, typename... Ts>
+            static constexpr std::size_t find( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
+            {
+                return std::size_t( -1 );
+            }
+        };
+    }
 
     template<typename Key, typename... Ts>
     constexpr std::size_t find( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
     {    
-        return find_impl<0, dict.size()>::find( dict, key );
+        return detail::find_impl<0, dict.size()>::find( dict, key );
     }
 
-    template<std::size_t I>
-    struct get_value_impl
+    // get_value
+    namespace detail
     {
-        template<typename Key, typename... Ts>
-        static constexpr auto get( const const_dict<Key, Ts...>& dict )
+        template<std::size_t I>
+        struct get_value_impl
         {
-            return get_element<I>( dict ).value();
-        }
-    };
+            template<typename Key, typename... Ts>
+            static constexpr auto get( const const_dict<Key, Ts...>& dict )
+            {
+                return get_element<I>( dict ).value();
+            }
+        };
 
-    template<>
-    struct get_value_impl<std::size_t( -1 )>
-    {
-        template<typename Key, typename... Ts>
-        static constexpr auto get( const const_dict<Key, Ts...>& dict )
+        template<>
+        struct get_value_impl<std::size_t( -1 )>
         {
-            return nullptr;
-        }
-    };
+            template<typename Key, typename... Ts>
+            static constexpr auto get( const const_dict<Key, Ts...>& dict )
+            {
+                return nullptr;
+            }
+        };
+    }
 
-    #define get_value( dict, key ) get_value_impl<find( dict, key )>::get( dict );
+    #define get_value( dict, key ) detail::get_value_impl<find( dict, key )>::get( dict )
 }
