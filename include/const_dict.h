@@ -13,17 +13,27 @@ namespace compile_time_utility
 
         using key_type = Key;
 
+        using array_type = const_array<key_type, base::SIZE>;
+        const array_type _index;
+
         template<std::size_t I>
         using value_type = const_pair<Key, decltype( std::get<I>( std::declval<std::tuple<Ts...>>() ) )>;
 
     public:
         constexpr const_dict( const const_pair<Key, Ts>&... values )
             : base{ values... }
+            , _index{ values.key()... }
         {
         }
         constexpr const_dict( const const_dict& other )
             : base{ other }
+            , _index{ other._index }
         {
+        }
+
+        constexpr std::size_t find( const key_type& key ) const
+        {
+            return _index.find( key ); 
         }
     };
 
@@ -85,5 +95,26 @@ namespace compile_time_utility
         };
     }
 
-    #define get_value( dict, key ) ::compile_time_utility::detail::get_value_impl<find( dict, key )>::get( dict )
+    // // template<typename Key, typename... Ts>
+    // // constexpr auto get_value_impl = []( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
+    // // {
+    // //     return get_element<dict.find( key )>( dict ).value();
+    // // };
+
+    // // template<typename Key, typename... Ts>
+    // // constexpr auto get_value( const const_dict<Key, Ts...>& dict, const typename const_dict<Key, Ts...>::key_type& key )
+    // // {
+    // //     return get_value_impl<Key, Ts...>( dict, key );
+    // // }
+
+    // template<std::size_t I>
+    // constexpr auto get_ele = []( const detail::const_tuple_leaf<I, auto>& leaf )
+    // {
+    //     return leaf.value();
+    // };
+
+    // // constexpr auto get_ele = []( const auto& index, const auto& tuple ){ return static_cast<detail::const_tuple_leaf<index, U>>( tuple ).value(); }
+    // constexpr auto get_value = []( const auto& dict, const auto& key ){ return get_ele<find( dict, "glossary" )>( dict ).value(); };
+
+    // // #define get_value( dict, key ) ::compile_time_utility::detail::get_value_impl<find( dict, key )>::get( dict )
 }

@@ -152,6 +152,9 @@ int main( int argc, char** argv )
     constexpr std::size_t I = find( root, "glossary" );
     printf( "find return: %lu\n", I );
 
+    // have to be like this, not working otherwise
+    #define get_value( dict, key ) get_element<find( dict, key )>( dict ).value()
+
     constexpr auto glossary = get_value( root, "glossary" );
         constexpr auto glossary_title = get_value( glossary, "title" );
         constexpr auto glossary_GlossDiv = get_value( glossary, "GlossDiv" );
@@ -185,6 +188,8 @@ int main( int argc, char** argv )
                             printf( "\t\t\t\t\t\tGlossDef_GlossSeeAlso[0] = %s\n", GlossDef_GlossSeeAlso[0].data() );
                             printf( "\t\t\t\t\t\tGlossDef_GlossSeeAlso[1] = %s\n", GlossDef_GlossSeeAlso[1].data() );
                     printf( "\t\t\t\tGlossEntry_GlossSee = %s\n", GlossEntry_GlossSee.data() );
+
+    #undef get_value
 
     return 0;
 }
