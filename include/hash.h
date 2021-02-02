@@ -4,7 +4,12 @@
 
 namespace compile_time_utility
 {
-    #define BIG_CONSTANT( x ) x##ul
+    #ifdef _WIN32
+        #define BIG_CONSTANT( x ) x##ull
+    #else
+        #define BIG_CONSTANT( x ) x##ul
+    #endif
+
     template<typename T>
     struct is_byte : std::false_type {};
     template<>
@@ -56,15 +61,16 @@ namespace compile_time_utility
             return this_type::hash<unsigned char>( reinterpret_cast<const unsigned char*>( std::addressof( data ) ), sizeof( T ), seed );
         }
     };
-    using hash_fnv32 = hash_fnv<unsigned int, BIG_CONSTANT( 2166136261 ), BIG_CONSTANT( 16777619 )>;
-    using hash_fnv64 = hash_fnv<unsigned long, BIG_CONSTANT( 14695981039346656037 ), BIG_CONSTANT( 1099511628211 )>;
+    using hash_fnv32 = hash_fnv<std::uint32_t, BIG_CONSTANT( 2166136261 ), BIG_CONSTANT( 16777619 )>;
+    using hash_fnv64 = hash_fnv<std::uint64_t, BIG_CONSTANT( 14695981039346656037 ), BIG_CONSTANT( 1099511628211 )>;
+
     template<typename H>
     using hash_fnv_switch = typename std::conditional<sizeof( H ) <= sizeof( unsigned int ), hash_fnv32, hash_fnv64>::type;
-    constexpr unsigned int hash32( const char* s )
+    constexpr std::uint32_t hash32( const char* s )
     {
         return hash_fnv32::hash_sz( s );
     }
-    constexpr unsigned long hash64( const char* s )
+    constexpr std::uint64_t hash64( const char* s )
     {
         return hash_fnv64::hash_sz( s );
     }
