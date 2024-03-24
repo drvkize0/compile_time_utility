@@ -1,16 +1,7 @@
 #include <string>
 #include <source_location>
 
-
 // extracted from https://github.com/getml/reflect-cpp
-
-struct Test {
-    std::string name;
-    std::string address;
-    int age;
-
-    static float anything;
-};
 
 template<typename T>
 struct wrapper
@@ -45,6 +36,14 @@ static consteval auto get_member_ptr()
 {
     return std::get<N>( fake_object_tuple_view_helper<Test>::tuple_view() );
 }
+
+struct Test {
+    std::string name;
+    std::string address;
+    int age;
+
+    static float anything;
+};
 
 int main(int, char**)
 {
